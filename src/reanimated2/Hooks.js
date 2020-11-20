@@ -615,3 +615,7 @@ export function useWorkletCallback(fun, deps) {
 export function createWorklet(fun) {
   return fun;
 }
+
+export function spawnThread(operations) {
+  return NativeReanimated.spawnThread(operations);
+}
