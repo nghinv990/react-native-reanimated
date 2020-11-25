@@ -1,6 +1,6 @@
 #import "NativeMethods.h"
 #import <React/RCTScrollView.h>
-
+#import <React/RCTEventDispatcher.h>
 
 namespace reanimated {
 
