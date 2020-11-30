@@ -5,10 +5,15 @@
 #import "REAModule.h"
 #import "REANodesManager.h"
 #import "NativeMethods.h"
-#import <jsi/JSCRuntime.h>
 #import <folly/json.h>
 #import <React/RCTFollyConvert.h>
 #import <React/RCTUIManager.h>
+
+#if __has_include(<hermes/hermes.h>)
+#import <hermes/hermes.h>
+#else
+#import <jsi/JSCRuntime.h>
+#endif
 
 namespace reanimated {
 
@@ -107,7 +112,13 @@ std::shared_ptr<NativeReanimatedModule> createReanimatedModule(std::shared_ptr<C
   };
 
   std::shared_ptr<Scheduler> scheduler(new REAIOSScheduler(jsInvoker));
-  std::unique_ptr<jsi::Runtime> animatedRuntime = facebook::jsc::makeJSCRuntime();
+
+  #if __has_include(<hermes/hermes.h>)
+    std::unique_ptr<jsi::Runtime> animatedRuntime = facebook::hermes::makeHermesRuntime();
+  #else
+    std::unique_ptr<jsi::Runtime> animatedRuntime = facebook::jsc::makeJSCRuntime();
+  #endif
+
   std::shared_ptr<ErrorHandler> errorHandler = std::make_shared<REAIOSErrorHandler>(scheduler);
   std::shared_ptr<NativeReanimatedModule> module;
 
